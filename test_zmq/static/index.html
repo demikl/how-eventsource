@@ -9,28 +9,39 @@
 <script>
 if (!!window.EventSource) {
   var pingList = document.getElementById("pingList");
-
   var source = new EventSource('/');
+
   source.onmessage = function(e) {
     $("#data").text(e.data);
   }
+
   source.addEventListener("ping", function(e) {
     var newElt = document.createElement("li");
     var obj = JSON.parse(e.data);
     newElt.innerHTML = "ping at " + obj.time
     pingList.appendChild(newElt);
   }, false);
+
   source.addEventListener("teleinfo", function(e) {
     var obj = JSON.parse(e.data);
     $("#data").text("from teleinfo event: " + e.data);
-    $("teleinfo").text(obj.PAPP + " Watts");
+    $("#ts").text(obj.date);
+    $("#PAPP").text(obj.PAPP);
+    $("#Tarif").text(obj.PTEC);
+    $("#HC").text(obj.HC);
+    $("#HP").text(obj.HP);
   }, false);
 }
 </script>
 <body>
 <div id="data">nothing received yet</div>
 <h1>Teleinfo</h1>
-<div id="teleinfo">no data</div>
+<div>Derniere info recue a :</div><div id="ts">#N/A</div>
+<ul id="teleinfo"></ul>
+<li>Conso instantanee: <span id="PAPP">#N/A</span> Watts</span></li>
+<li>Periode tarifaire: <span id="Tarif">#N/A</span></li>
+<li>Conso HC: <span id="HC">#N/A</span> Wh</li>
+<li>Conso HP: <span id="HP">#N/A</span> Wh</li>
 <h1>Ping</h1>
 <ul id="pingList">
 </body>

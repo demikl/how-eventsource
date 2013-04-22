@@ -14,6 +14,7 @@ def index():
         srv.bind("tcp://*:6543")
         def events():
             while True:
+                print "Waiting msg from socket..."
                 msg = srv.recv()
                 whatToSend = "event: teleinfo\ndata: %s\n\n" % msg
                 print whatToSend
