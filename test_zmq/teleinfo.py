@@ -63,14 +63,19 @@ if __name__ == "__main__":
 		dbc.execute( "COMMIT;" );
 		dbc.close()
 
-		content = io.BytesIO()
-		content.write("\x01\x00")
 		msg = { "PAPP":data["PAPP"], "HC":data["HCHC"], "HP":data["HCHP"], "PTEC":data["PTEC"] }
+		msg[ "date" ] = str(datetime.datetime.now())
 		msg = json.dumps( msg )
 		print len(msg),msg
+		content = io.BytesIO()
+		content.write("\x01\x00")
 		content.write( chr(len(msg)+1) )
 		content.write( "\x00" )
 		content.write( msg )
+		content.write( "\n" )
+
+		print content.getvalue()
+		print content.getvalue()
 
 		s=socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 		s.connect(("192.168.0.106", 6543))
